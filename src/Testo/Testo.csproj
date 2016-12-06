@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyExceptions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=c67439bb3972710e, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyExceptions.1.1.1.0\lib\net40\EasyExceptions.dll</HintPath>
+    <Reference Include="EasyExceptions, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c67439bb3972710e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyExceptions.1.2.0.0\lib\net40\EasyExceptions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
