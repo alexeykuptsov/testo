@@ -30,24 +30,24 @@ namespace Testo.TestDataBased
             var directoriesInExpectedOnly = GetDirectoryListString(inExpectedOnly);
             if (directoriesInExpectedOnly != "[]")
             {
-                messageBuilder.Append($"  Directories in expected only: {directoriesInExpectedOnly}\r\n");
+                messageBuilder.AppendLine($"  Directories in expected only: {directoriesInExpectedOnly}");
             }
             var directoriesInActualOnly = GetDirectoryListString(inActualOnly);
             if (directoriesInActualOnly != "[]")
             {
-                messageBuilder.Append($"  Directories in actual only: {directoriesInActualOnly}\r\n");
+                messageBuilder.AppendLine($"  Directories in actual only: {directoriesInActualOnly}");
             }
 
             var filesInExpectedOnly = GetFileListString(inExpectedOnly);
             if (filesInExpectedOnly != "[]")
             {
-                messageBuilder.Append($"  Files in expected only: {filesInExpectedOnly}\r\n");
+                messageBuilder.AppendLine($"  Files in expected only: {filesInExpectedOnly}");
             }
 
             var filesInActualOnly = GetFileListString(inActualOnly);
             if (filesInActualOnly != "[]")
             {
-                messageBuilder.Append($"  Files in actual only: {filesInActualOnly}\r\n");
+                messageBuilder.AppendLine($"  Files in actual only: {filesInActualOnly}");
             }
 
             // ReSharper disable once InvokeAsExtensionMethod
@@ -74,9 +74,9 @@ namespace Testo.TestDataBased
 
             var messagesString = messageBuilder.ToString();
             assert.IsTrue(messagesString == "",
-                $"{assertion}\r\n" +
-                $"  Expected test data directory: {expectedDataDirectory.Url}\r\n" +
-                $"  Actual test data directory:   {actualDataDirectory.Url}\r\n" +
+                $"{assertion}" + Environment.NewLine +
+                $"  Expected test data directory: {expectedDataDirectory.Url}" + Environment.NewLine +
+                $"  Actual test data directory:   {actualDataDirectory.Url}" + Environment.NewLine +
                 messagesString);
         }
 

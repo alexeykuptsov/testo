@@ -62,8 +62,9 @@ namespace Testo.Tests.FileSystem
             return parameterInfo.Name;
         }
 
-        [Test]
-        [Ignore("The test is an utility.")]
+        // ReSharper disable once UnusedMember.Global
+        // This test is used as code generation utility. Don't commit it with uncommented Test attribute.
+        //[Test]
         public void GenerateFileSystemTypes()
         {
             GenerateInterfaceAndImplementation(typeof(File));
