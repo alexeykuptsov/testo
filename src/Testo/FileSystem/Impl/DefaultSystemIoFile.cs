@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Testo.FileSystem
+namespace Testo.FileSystem.Impl
 {
-    class FileSystemRootDir : IRootDir
+    public class DefaultSystemIOFile : ISystemIOFile
     {
-        public FileSystemRootDir(string rootDir)
+        public DefaultSystemIOFile(string rootDir)
         {
             RootDir = rootDir;
         }

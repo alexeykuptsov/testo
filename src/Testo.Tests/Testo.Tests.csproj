@@ -44,9 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileSystem\RootDirInterfaceTests.cs" />
+    <Compile Include="FileSystem\InterfacesTests.cs" />
     <Compile Include="TestBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDataBased\TestDataAssertTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Testo\Testo.csproj">
