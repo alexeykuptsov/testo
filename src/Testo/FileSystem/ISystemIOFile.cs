@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Testo.FileSystem
 {
-    public interface IRootDir
+    public interface ISystemIOFile
     {
         System.IO.StreamReader OpenText(string subpath);
         System.IO.StreamWriter CreateText(string subpath);

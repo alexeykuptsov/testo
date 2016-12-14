@@ -2,9 +2,9 @@
 
 namespace Testo
 {
-  public class TestsBase
+  public static class TestUtils
   {
-    public void DoTest(Action action)
+    public static void DoTest(Action action)
     {
       try
       {
@@ -12,7 +12,7 @@ namespace Testo
       }
       catch (Exception ex)
       {
-        throw new DescribedException(ex);
+        throw new TestoException(ex);
       }
     }
   }
