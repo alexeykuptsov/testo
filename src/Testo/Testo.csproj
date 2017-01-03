@@ -30,8 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyExceptions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=c67439bb3972710e, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyExceptions.1.1.1.0\lib\net40\EasyExceptions.dll</HintPath>
+    <Reference Include="DiffPlex, Version=1.2.0.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiffPlex.1.2.1\lib\portable-net40+sl50+win+wpa81+wp80\DiffPlex.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EasyExceptions, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c67439bb3972710e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyExceptions.1.2.0.0\lib\net40\EasyExceptions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -47,13 +55,28 @@
     <Compile Include="..\AssemblyKey.cs">
       <Link>AssemblyKey.cs</Link>
     </Compile>
-    <Compile Include="DescribedException.cs" />
-    <Compile Include="TestsBase.cs" />
+    <Compile Include="AssertionException.cs" />
+    <Compile Include="Extensibility\ComponentResolver.cs" />
+    <Compile Include="Extensibility\IComponentResolver.cs" />
+    <Compile Include="Extensibility\Impl\DefaultClassicAssert.cs" />
+    <Compile Include="Extensibility\Impl\DefaultComponentResolver.cs" />
+    <Compile Include="FileSystem\Impl\DefaultFileSystemDirectory.cs" />
+    <Compile Include="FileSystem\IFileSystemDirectory.cs" />
+    <Compile Include="FileSystem\Impl\DefaultSystemIODirectory.cs" />
+    <Compile Include="FileSystem\ISystemIODirectory.cs" />
+    <Compile Include="Extensibility\IClassicAssert.cs" />
+    <Compile Include="TestDataBased\TestDataAssert.cs" />
+    <Compile Include="TestDataBased\TestDataScope.cs" />
+    <Compile Include="TestoException.cs" />
+    <Compile Include="TestUtils.cs" />
+    <Compile Include="FileSystem\Impl\DefaultSystemIoFile.cs" />
+    <Compile Include="FileSystem\ISystemIOFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

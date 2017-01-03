@@ -3,9 +3,9 @@ using EasyExceptions;
 
 namespace Testo
 {
-  public class DescribedException : Exception
+  public class TestoException : Exception
   {
-    public DescribedException(Exception exception)
+    public TestoException(Exception exception)
       : base(ExceptionDumpUtil.Dump(exception))
     {}
   }

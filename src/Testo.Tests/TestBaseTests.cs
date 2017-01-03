@@ -7,10 +7,9 @@ namespace Testo.Tests
     [Test]
     public void Test01()
     {
-      var testsBase = new TestsBase();
-      Assert.Throws<DescribedException>(() =>
+      Assert.Throws<TestoException>(() =>
       {
-        testsBase.DoTest(() =>
+        TestUtils.DoTest(() =>
         {
           Assert.IsTrue(false);
         });
