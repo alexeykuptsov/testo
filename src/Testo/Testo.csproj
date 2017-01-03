@@ -66,6 +66,7 @@
     <Compile Include="FileSystem\ISystemIODirectory.cs" />
     <Compile Include="Extensibility\IClassicAssert.cs" />
     <Compile Include="TestDataBased\TestDataAssert.cs" />
+    <Compile Include="TestDataBased\TestDataScope.cs" />
     <Compile Include="TestoException.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="FileSystem\Impl\DefaultSystemIoFile.cs" />
