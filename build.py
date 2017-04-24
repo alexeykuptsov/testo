@@ -31,11 +31,15 @@ def main():
         os.path.join(root_dir, 'bin/Testo.1.2.0.nupkg'),
         os.path.join(root_dir, 'artifacts'))
 
-    subprocess.check_call([
-        'dotnet',
-        'vstest',
-        'bin\\netcoreapp1.1\\Testo.Tests.dll'
-    ])
+    vstest()
+
+
+def vstest():
+    cmd_args = ['dotnet', 'vstest', 'bin\\netcoreapp1.1\\Testo.Tests.dll']
+    teamcity_agent_home_dir = os.environ.get("teamcity.agent.home.dir", None)
+    if teamcity_agent_home_dir:
+        cmd_args.append('/logger:TeamCity')
+    subprocess.check_call(cmd_args)
 
 
 def msbuild_exec(sln_path):
