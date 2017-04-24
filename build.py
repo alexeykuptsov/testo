@@ -28,7 +28,7 @@ def main():
     msbuild_exec(sln_path)
 
     shutil.copy(
-        os.path.join(root_dir, 'bin/Testo.1.3.0.nupkg'),
+        os.path.join(root_dir, 'bin/Testo.1.2.0.nupkg'),
         os.path.join(root_dir, 'artifacts'))
 
     subprocess.check_call([
