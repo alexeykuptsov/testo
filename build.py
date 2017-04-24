@@ -38,6 +38,7 @@ def vstest():
     cmd_args = ['dotnet', 'vstest', 'bin\\netcoreapp1.1\\Testo.Tests.dll']
     teamcity_agent_home_dir = os.environ.get("teamcity.agent.home.dir", None)
     if teamcity_agent_home_dir:
+        print('teamcity_agent_home_dir detected')
         cmd_args.append('/logger:TeamCity')
     subprocess.check_call(cmd_args)
 
