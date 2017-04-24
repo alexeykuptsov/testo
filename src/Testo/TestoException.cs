@@ -7,6 +7,7 @@ namespace Testo
   {
     public TestoException(Exception exception)
       : base(ExceptionDumpUtil.Dump(exception))
-    {}
+    {
+    }
   }
 }

@@ -7,135 +7,138 @@ using DiffPlex;
 using DiffPlex.DiffBuilder.Model;
 using Testo.Extensibility;
 using Testo.FileSystem;
+
 // ReSharper disable UnusedParameter.Global
 
 namespace Testo.TestDataBased
 {
-    public static class TestDataAssert
+  public static class TestDataAssert
+  {
+    public static void DirectoriesAreEqual(
+      IFileSystemDirectory expectedDataDirectory,
+      IFileSystemDirectory actualDataDirectory,
+      string assertion = "Directories are equal")
     {
-        public static void DirectoriesAreEqual(
-            IFileSystemDirectory expectedDataDirectory,
-            IFileSystemDirectory actualDataDirectory,
-            string assertion = "Directories are equal")
-        {
-            var expectedFileSystemEntries = GetFilesWithAttributes(expectedDataDirectory);
-            var actualFileSystemEntries = GetFilesWithAttributes(actualDataDirectory);
-            var assert = ComponentResolver.Instance.Resolve<IClassicAssert>();
+      var expectedFileSystemEntries = GetFilesWithAttributes(expectedDataDirectory);
+      var actualFileSystemEntries = GetFilesWithAttributes(actualDataDirectory);
+      var assert = ComponentResolver.Instance.Resolve<IClassicAssert>();
 
-            var inExpectedOnly = expectedFileSystemEntries.Except(actualFileSystemEntries).ToList();
-            var inActualOnly = actualFileSystemEntries.Except(expectedFileSystemEntries).ToList();
+      var inExpectedOnly = expectedFileSystemEntries.Except(actualFileSystemEntries).ToList();
+      var inActualOnly = actualFileSystemEntries.Except(expectedFileSystemEntries).ToList();
 
-            var messageBuilder = new StringBuilder();
+      var messageBuilder = new StringBuilder();
 
-            var directoriesInExpectedOnly = GetDirectoryListString(inExpectedOnly);
-            if (directoriesInExpectedOnly != "[]")
-            {
-                messageBuilder.AppendLine($"  Directories in expected only: {directoriesInExpectedOnly}");
-            }
-            var directoriesInActualOnly = GetDirectoryListString(inActualOnly);
-            if (directoriesInActualOnly != "[]")
-            {
-                messageBuilder.AppendLine($"  Directories in actual only: {directoriesInActualOnly}");
-            }
+      var directoriesInExpectedOnly = GetDirectoryListString(inExpectedOnly);
+      if (directoriesInExpectedOnly != "[]")
+      {
+        messageBuilder.AppendLine($"  Directories in expected only: {directoriesInExpectedOnly}");
+      }
+      var directoriesInActualOnly = GetDirectoryListString(inActualOnly);
+      if (directoriesInActualOnly != "[]")
+      {
+        messageBuilder.AppendLine($"  Directories in actual only: {directoriesInActualOnly}");
+      }
 
-            var filesInExpectedOnly = GetFileListString(inExpectedOnly);
-            if (filesInExpectedOnly != "[]")
-            {
-                messageBuilder.AppendLine($"  Files in expected only: {filesInExpectedOnly}");
-            }
+      var filesInExpectedOnly = GetFileListString(inExpectedOnly);
+      if (filesInExpectedOnly != "[]")
+      {
+        messageBuilder.AppendLine($"  Files in expected only: {filesInExpectedOnly}");
+      }
 
-            var filesInActualOnly = GetFileListString(inActualOnly);
-            if (filesInActualOnly != "[]")
-            {
-                messageBuilder.AppendLine($"  Files in actual only: {filesInActualOnly}");
-            }
+      var filesInActualOnly = GetFileListString(inActualOnly);
+      if (filesInActualOnly != "[]")
+      {
+        messageBuilder.AppendLine($"  Files in actual only: {filesInActualOnly}");
+      }
 
-            // ReSharper disable once InvokeAsExtensionMethod
-            var filesInBothDirs =
-                Enumerable.Intersect(expectedFileSystemEntries, actualFileSystemEntries)
-                    .Where(_ => !_.Attributes.HasFlag(FileAttributes.Directory))
-                    .Select(_ => _.Path)
-                    .ToList();
-            var differ = new DiffPlex.DiffBuilder.InlineDiffBuilder(new Differ());
-            var differingFiles = new List<string>();
-            foreach (var filePath in filesInBothDirs)
-            {
-                var diffModel = differ.BuildDiffModel(
-                    expectedDataDirectory.File.ReadAllText(filePath),
-                    actualDataDirectory.File.ReadAllText(filePath));
+      // ReSharper disable once InvokeAsExtensionMethod
+      var filesInBothDirs =
+        Enumerable.Intersect(expectedFileSystemEntries, actualFileSystemEntries)
+          .Where(_ => !_.Attributes.HasFlag(FileAttributes.Directory))
+          .Select(_ => _.Path)
+          .ToList();
+      var differ = new DiffPlex.DiffBuilder.InlineDiffBuilder(new Differ());
+      var differingFiles = new List<string>();
+      foreach (var filePath in filesInBothDirs)
+      {
+        var diffModel = differ.BuildDiffModel(
+          expectedDataDirectory.File.ReadAllText(filePath),
+          actualDataDirectory.File.ReadAllText(filePath));
 
-                if (diffModel.Lines.Any(_ => _.Type != ChangeType.Unchanged))
-                    differingFiles.Add(filePath);
-            }
-            if (differingFiles.Count > 0)
-            {
-                messageBuilder.Append($"  Differing files: [{string.Join(", ", differingFiles)}]\r\n");
-            }
+        if (diffModel.Lines.Any(_ => _.Type != ChangeType.Unchanged))
+          differingFiles.Add(filePath);
+      }
+      if (differingFiles.Count > 0)
+      {
+        messageBuilder.Append($"  Differing files: [{string.Join(", ", differingFiles)}]\r\n");
+      }
 
-            var messagesString = messageBuilder.ToString();
-            assert.IsTrue(messagesString == "",
-                $"{assertion}" + Environment.NewLine +
-                $"  Expected test data directory: {expectedDataDirectory.Url}" + Environment.NewLine +
-                $"  Actual test data directory:   {actualDataDirectory.Url}" + Environment.NewLine +
-                messagesString);
-        }
-
-        private static string GetDirectoryListString(IEnumerable<FilePathAndAttributes> files)
-        {
-            var paths = files.Where(_ => _.Attributes.HasFlag(FileAttributes.Directory)).Select(_ => _.Path);
-            return $"[{string.Join(", ", paths)}]";
-        }
-
-        private static string GetFileListString(IEnumerable<FilePathAndAttributes> files)
-        {
-            var paths = files.Where(_ => !_.Attributes.HasFlag(FileAttributes.Directory)).Select(_ => _.Path);
-            return $"[{string.Join(", ", paths)}]";
-        }
-
-        private static List<FilePathAndAttributes> GetFilesWithAttributes(IFileSystemDirectory directory)
-        {
-            return directory.Directory.GetFileSystemEntries("", "*", SearchOption.AllDirectories)
-                .Select(_ => _.Substring(directory.DirectoryPath.Length + 1)).Select(_ => new FilePathAndAttributes(_, directory.File.GetAttributes(_))).ToList();
-        }
-
-        private class FilePathAndAttributes
-        {
-            public string Path { get; }
-            public FileAttributes Attributes { get; }
-
-            public FilePathAndAttributes(string path, FileAttributes attributes)
-            {
-                Path = path;
-                Attributes = attributes;
-            }
-
-            private bool Equals(FilePathAndAttributes other)
-            {
-                if (!string.Equals(Path, other.Path))
-                    return false;
-                if (Attributes.HasFlag(FileAttributes.Directory) && other.Attributes.HasFlag(FileAttributes.Directory))
-                    return true;
-                // ReSharper disable once ConvertIfStatementToReturnStatement
-                if (Attributes.HasFlag(FileAttributes.Directory) || other.Attributes.HasFlag(FileAttributes.Directory))
-                    return false;
-                return true;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != GetType()) return false;
-                return Equals((FilePathAndAttributes) obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return ((Path?.GetHashCode() ?? 0)*397) ^ (int) Attributes;
-                }
-            }
-        }
+      var messagesString = messageBuilder.ToString();
+      assert.IsTrue(messagesString == "",
+        $"{assertion}" + Environment.NewLine +
+        $"  Expected test data directory: {expectedDataDirectory.Url}" + Environment.NewLine +
+        $"  Actual test data directory:   {actualDataDirectory.Url}" + Environment.NewLine +
+        messagesString);
     }
+
+    private static string GetDirectoryListString(IEnumerable<FilePathAndAttributes> files)
+    {
+      var paths = files.Where(_ => _.Attributes.HasFlag(FileAttributes.Directory)).Select(_ => _.Path);
+      return $"[{string.Join(", ", paths)}]";
+    }
+
+    private static string GetFileListString(IEnumerable<FilePathAndAttributes> files)
+    {
+      var paths = files.Where(_ => !_.Attributes.HasFlag(FileAttributes.Directory)).Select(_ => _.Path);
+      return $"[{string.Join(", ", paths)}]";
+    }
+
+    private static List<FilePathAndAttributes> GetFilesWithAttributes(IFileSystemDirectory directory)
+    {
+      return directory.Directory.GetFileSystemEntries("", "*", SearchOption.AllDirectories)
+        .Select(_ => _.Substring(directory.DirectoryPath.Length + 1))
+        .Select(_ => new FilePathAndAttributes(_, directory.File.GetAttributes(_)))
+        .ToList();
+    }
+
+    private class FilePathAndAttributes
+    {
+      public string Path { get; }
+      public FileAttributes Attributes { get; }
+
+      public FilePathAndAttributes(string path, FileAttributes attributes)
+      {
+        Path = path;
+        Attributes = attributes;
+      }
+
+      private bool Equals(FilePathAndAttributes other)
+      {
+        if (!string.Equals(Path, other.Path))
+          return false;
+        if (Attributes.HasFlag(FileAttributes.Directory) && other.Attributes.HasFlag(FileAttributes.Directory))
+          return true;
+        // ReSharper disable once ConvertIfStatementToReturnStatement
+        if (Attributes.HasFlag(FileAttributes.Directory) || other.Attributes.HasFlag(FileAttributes.Directory))
+          return false;
+        return true;
+      }
+
+      public override bool Equals(object obj)
+      {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((FilePathAndAttributes) obj);
+      }
+
+      public override int GetHashCode()
+      {
+        unchecked
+        {
+          return ((Path?.GetHashCode() ?? 0) * 397) ^ (int) Attributes;
+        }
+      }
+    }
+  }
 }

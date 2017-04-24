@@ -1,88 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C1E2C37C-B561-422E-9171-A50D311F1E63}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Testo</RootNamespace>
-    <AssemblyName>Testo</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <Copyright>Copyright © 2016-2017 Alexey Kuptsov</Copyright>
+    <Version>1.3.0</Version>
+    <Authors>Alexey Kuptsov</Authors>
+    <Company>Alexey Kuptsov</Company>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Testing utililities</Description>
+    <PackageProjectUrl>https://github.com/alexeykuptsov/testo</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/alexeykuptsov/testo/wiki/License</PackageLicenseUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+    <NoWarn />
     <OutputPath>..\..\binDebug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="DiffPlex, Version=1.2.0.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiffPlex.1.2.1\lib\portable-net40+sl50+win+wpa81+wp80\DiffPlex.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EasyExceptions, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c67439bb3972710e, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyExceptions.1.2.0.0\lib\net40\EasyExceptions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Compile Include="..\AssemblyKey.cs" Link="AssemblyKey.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\AssemblyKey.cs">
-      <Link>AssemblyKey.cs</Link>
-    </Compile>
-    <Compile Include="AssertionException.cs" />
-    <Compile Include="Extensibility\ComponentResolver.cs" />
-    <Compile Include="Extensibility\IComponentResolver.cs" />
-    <Compile Include="Extensibility\Impl\DefaultClassicAssert.cs" />
-    <Compile Include="Extensibility\Impl\DefaultComponentResolver.cs" />
-    <Compile Include="FileSystem\Impl\DefaultFileSystemDirectory.cs" />
-    <Compile Include="FileSystem\IFileSystemDirectory.cs" />
-    <Compile Include="FileSystem\Impl\DefaultSystemIODirectory.cs" />
-    <Compile Include="FileSystem\ISystemIODirectory.cs" />
-    <Compile Include="Extensibility\IClassicAssert.cs" />
-    <Compile Include="TestDataBased\TestDataAssert.cs" />
-    <Compile Include="TestDataBased\TestDataScope.cs" />
-    <Compile Include="TestoException.cs" />
-    <Compile Include="TestUtils.cs" />
-    <Compile Include="FileSystem\Impl\DefaultSystemIoFile.cs" />
-    <Compile Include="FileSystem\ISystemIOFile.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="DiffPlex" Version="1.4.1" />
+    <PackageReference Include="EasyExceptions" Version="2.0.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

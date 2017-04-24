@@ -7,45 +7,41 @@ def main():
     root_dir = os.path.dirname(__file__)
     artifacts_dir = os.path.join(root_dir, 'artifacts')
     sln_path = os.path.join(root_dir, 'src/Testo.sln')
-    nuget_path = os.path.join(root_dir, 'tools/NuGet/nuget.exe')
-    main_project_path = os.path.join(root_dir, 'src\Testo\Testo.csproj')
 
     if os.path.isdir(artifacts_dir):
         shutil.rmtree(artifacts_dir)
     os.mkdir(artifacts_dir)
 
-    subprocess.check_call([nuget_path, 'restore', sln_path])
+    subprocess.check_call(['C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\Tools\\VsDevCmd.bat'])
+
+    subprocess.check_call([
+        'dotnet',
+        'restore',
+        'src\\Testo.sln',
+        '/p:Configuration=Release',
+        '/p:Platform=Any CPU'
+    ])
 
     shutil.copy(os.path.join(os.environ['ASSEMBLY_SIGNING_KEY_HOME'], 'key.snk'),
                 os.path.join(root_dir, 'key.snk'))
 
     msbuild_exec(sln_path)
 
-    subprocess.check_call([
-        nuget_path,
-        'pack', main_project_path,
-        '-Prop', 'Configuration=Release',
-        '-Prop', 'Platform=AnyCPU',
-        '-OutputDirectory', 'artifacts'
-    ])
-
-    nuget_packages_dir = os.path.abspath(os.path.join(root_dir, 'tools/NuGet/packages'))
-    subprocess.check_call([
-        nuget_path,
-        'restore', os.path.join(root_dir, 'tools/NuGet/packages.config'),
-        '-o', nuget_packages_dir
-    ])
+    shutil.copy(
+        os.path.join(root_dir, 'bin/Testo.1.3.0.nupkg'),
+        os.path.join(root_dir, 'artifacts'))
 
     subprocess.check_call([
-        os.path.abspath(os.path.join(nuget_packages_dir, 'NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe')),
-        os.path.join(root_dir, 'bin/Testo.Tests.dll'),
-        '--noresult'
-    ], shell=True)
+        'dotnet',
+        'vstest',
+        'bin\\netcoreapp1.1\\Testo.Tests.dll'
+    ])
 
 
 def msbuild_exec(sln_path):
     cmd_args = [
-        'C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe',
+        'dotnet',
+        'build',
         sln_path,
         '/p:Configuration=Release',
         '/p:Platform=Any CPU',
